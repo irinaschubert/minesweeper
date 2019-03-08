@@ -9,3 +9,9 @@ Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper
 *  Das Spiel endet, wenn alle Felder aufgedeckt sind (= Sieg) oder auf ein Feld geklickt wurde, das eine Mine enthält (= Niederlage).
 *  Das Spiel informiert den Spieler über das Ende des Spiels.
 *  Das Spiel zählt die Anzahl Markierungen, die der Spieler vorgenommen hat, um Minen zu kennzeichnen und zeigt diese Zahl an.
+
+# Mockup
+![alt text][basic]<br/>
+
+
+[basic]: /res/basic.png "basic mockup"
