@@ -3,25 +3,19 @@
 <head>
     <title>FWebT: Minesweeper mit javascript</title>    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
-    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet"> 
 </head>
 <body onload="startGame()">
-<script>
+<div class="container">
+    <header>
+        <h1>Minesweeper</h1>
+        <h2>Fortgeschrittene Webtechnologien<br>FS 2019, FFHS</h2>
+    </header>
     
-function startGame() {
-    myGameArea.start();
-}
+</div>    
 
-let myGameArea = {
-    canvas : document.createElement("canvas"),
-    start : function() {
-        this.canvas.width = 480;
-        this.canvas.height = 270;
-        this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-    }
-}
-</script>
+<script src="../js/minesweeper.js"></script>
 
 <p>hello world!</p>
 
