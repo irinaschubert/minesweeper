@@ -4,21 +4,85 @@
     <title>FWebT: Minesweeper mit javascript</title>    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
     <link rel="stylesheet" href="../css/style.css" type="text/css"/>
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 <body onload="startGame()">
 <div class="container">
     <header>
         <h1>Minesweeper</h1>
-        <h2>Fortgeschrittene Webtechnologien<br>FS 2019, FFHS</h2>
+        <h2>Fortgeschrittene Webtechnologien<br>FS 2019, FFHS, Irina Schubert</h2>
     </header>
-    
+    <section class="information-panel">
+        <div class="flagged">
+            <i class="far fa-flag"></i>
+            <div>123</div>
+        </div>
+        <div class="restart" onclick=startGame()>
+    		<i class="fas fa-redo-alt"></i>
+    	</div>
+        <div class="timer">
+            <i class="far fa-clock"></i>
+            <div>123</div>
+        </div>
+    </section>
+</div>
+<div class="container">
+    <div class="game-panel">
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>   
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+    </div>
+</div>
+<div class="container">
+<div class="dropdown">
+  <button class="dropbtn">Dropdown</button>
+  <div class="dropdown-content">
+  <a href="#">Anfänger</a>
+  <a href="#">Fortgeschritten</a>
+  <a href="#">Profi</a>
+  </div>
 </div>    
+</div>
+    
+<div id="popup-sieg" class="overlay">
+    <div class="popup">
+        <h2>Gewonnen!</h2>
+        <a class="close" href=# >×</a>
+        <div class="content">
+            Gratulation, du hast gewonnen!
+        </div>
+        <button id="play-again"onclick="playAgain()">Neues Spiel
+        </button>
+    </div>
+</div>
 
-<script src="../js/minesweeper.js"></script>
+<div id="popup-niederlage" class="overlay">
+    <div class="popup">
+        <h2>Verloren!</h2>
+        <a class="close" href=# >×</a>
+        <div class="content">
+            Du hast verloren.
+        </div>
+        <button id="play-again"onclick="playAgain()">Neues Spiel
+        </button>
+    </div>
+</div>
 
-<p>hello world!</p>
+<!--<script src="../js/minesweeper.js"></script>-->
 
 </body>
 </html>
-
