@@ -21,8 +21,8 @@ let displayField = function (){
 
 const panel = document.querySelector(".panel");
 
-function startGame(level) {
-    let level = level;
+function startGame() {
+    askForName();
     for (var i= 0; i < level; i++){
       [].forEach.call(fields, function(item){
          panel.appendChild(item);
@@ -81,3 +81,5 @@ function startTimer(){
         }
     },1000);
 }
+
+
