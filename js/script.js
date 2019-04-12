@@ -38,12 +38,26 @@ let openField = function (event){
     // Gewonnen?
     if(openedCards === (numberOfMines - numberOfMines)){
         alert(username + ", du hast gewonnen!");
-        document.getElementById("winnersName").innerHTML = username;
-        clearInterval(interval);
-        document.getElementById("finalTime").innerHTML = timerCounter.innerHTML;
-    }
+
+        const scoreElement = document.getElementById('score');
+        let winner = {};
+        winner.element = document.createElement('div');
+        winner.element.setAttribute("class", "winner" );
+        winner.element.innerHTML = username;
+        winner.element.innerHTML = timerCounter.innerHTML;
+        scoreElement.appendChild(winner.element);
+
+        }
+
     if(clickedElement.classList.contains("mine")){
         alert(username + ", du hast verloren!");
+        const scoreElement = document.getElementById('score');
+        let winner = {};
+        winner.element = document.createElement('div');
+        winner.element.setAttribute("class", "winner" );
+        let winnerPerson = String("Name: " + username + ", Zeit: " + timerCounter.innerHTML);
+        winner.element.innerHTML = winnerPerson;
+        scoreElement.appendChild(winner.element);
     }
 };
 
