@@ -5,115 +5,174 @@
  */
 
 'use strict';
-
 // global variables
-/*const deck = document.getElementById("deck");
-let matchedCard = document.getElementsByClassName("match");
-*/
-var openedCards = [];
+let openedCards = 0;
 let flagCount = 0;
-let numberOfMines = 2;
-let username = '';
+let numberOfMines;
+let username = 'Dummy';
+const deck = document.getElementById("board");
+const board = []
+let boardWidth;
+let boardHeight;
+let numberOfFields;
 
-
-function askForName(){
-    return String(prompt("Unter welchem Namen möchtest du spielen?"));
+// @description game timer
+let second = 0, minute = 0, hour = 0;
+let timer = document.querySelector(".timer");
+let interval;
+function startTimer() {
+    interval = setInterval(function () {
+        timer.innerHTML = minute + "mins " + second + "secs";
+        second++;
+        if (second == 60) {
+            minute++;
+            second = 0;
+        }
+        if (minute == 60) {
+            hour++;
+            minute = 0;
+        }
+    }, 1000);
 }
 
-function startGame(){
-    username = askForName();
-    let selectedLevel = document.getElementById("levelSelection");
-    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
-    resetValues();
-    setupFields(level);
-    //reset timer
-    //second = 0;
-    //minute = 0;
-    //hour = 0;
-    //var timer = document.querySelector(".timer");
-    //timer.innerHTML = "0 mins 0 secs";
-    //clearInterval(interval);
-}
+let openField = function (event){
+    let clickedElement = event.target;
+    openedCards = openedCards + 1;
+    clickedElement.classList.toggle("open");
 
-function reStartGame(){
-    let selectedLevel = document.getElementById("levelSelection");
-    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
-    resetValues();
-    setupFields(level);
-}
-
-let resetValues = function(){
-    numberOfMines = 2;
-    flagCount = 0;
-    showFlagCount();
-}
-
-// setup fields
-let setupFields = function (level = 2) {
-    let field = document.getElementsByClassName("field");
-    let fields = [...field];
-    /*fields = shuffle(fields);
-    // add event listeners to each field
-    for (let i = 0; i < fields.length; i++){
-        deck.innerHTML = "";
-        [].forEach.call(fields, function(item) {
-            deck.appendChild(item);
-        });
-        fields[i].classList.remove("show", "open", "match", "disabled");
-    }*/
-    for (let i = 0; i < fields.length; i++){
-        fields[i].addEventListener("click", openField);
-        fields[i].addEventListener("contextmenu", markField);
-        fields[i].setAttribute("id", i)
-        fields[i].style.backgroundColor = '#e6ffe6';
+    // Gewonnen?
+    if(openedCards == (numberOfMines - numberOfMines)){
+        alert(username + ", du hast gewonnen!")
+        document.getElementById("winnersName").innerHTML = username;
+        clearInterval(interval);
+        let finalTime = timer.innerHTML;
+        document.getElementById("finalTime").innerHTML = finalTime;
     }
-}
-
-let openField = function (){
-    //TODO check if mine, if yes: lost
-    openedCards.push(this);
-    if(openedCards[openedCards.length-1].type == "mine"){
+    if(clickedElement.classList.contains("mine")){
         alert(username + ", du hast verloren!")
-    } else {
-        document.getElementById(this.id).style.backgroundColor = '#ffffff';
     }
 }
 
-let markField = function (){
-    let currentBackgroundColor = getStyle(document.getElementById(this.id), 'background-color')
-    if(currentBackgroundColor == hexToRGB("#e6ffe6")){
-        document.getElementById(this.id).style.backgroundColor = '#ff33cc';
-        flagsOneUp();
-    }
-    else if (currentBackgroundColor == hexToRGB("#c9ffc9")){
-        document.getElementById(this.id).style.backgroundColor = '#ff33cc';
-        flagsOneUp();
-    }
-    else if (currentBackgroundColor == hexToRGB('#ff33cc')) {
-        document.getElementById(this.id).style.backgroundColor = '#e6ffe6';
+let markField = function (event){
+    let clickedElement = event.target;
+    if (clickedElement.classList.contains("flagged")) {
+        clickedElement.classList.remove("flagged");
         flagsOneDown();
+    }
+    else if (!clickedElement.classList.contains("flagged")){
+        clickedElement.classList.toggle("flagged");
+        flagsOneUp();
     }
     else {
         return;
     }
 }
 
-function getStyle(element,styleProp) {
-    if (element.currentStyle){
-        return element.currentStyle[styleProp];
+function getLevel(){
+    let selectedLevel = document.getElementById("levelSelection");
+    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
+    return level;
+}
+
+function setupFields(level = 2){
+    if (level == 2){
+        boardWidth = 16;
+        boardHeight = 26;
+        numberOfFields = boardWidth*boardHeight;
+        numberOfMines = 80;
+    }else if (level==1){
+        boardWidth = 16;
+        boardHeight = 16;
+        numberOfFields = boardWidth*boardHeight;
+        numberOfMines = 10;
+    }else {
+        boardWidth = 26;
+        boardHeight = 26;
+        numberOfFields = boardWidth*boardHeight;
+        numberOfMines = 150;
     }
-    return document.defaultView.getComputedStyle(element,null)[styleProp];
+    const boardElement = document.getElementById('board');
+    // empty existing fields
+    boardElement.innerHTML = "";
+    for (let y = 0; y < boardHeight; y++) {
+        for (let x = 0; x < boardWidth; x++) {
+            let cell = {};
+            // Create a <div class="field"></div> and store it in the cell object
+            cell.element = document.createElement('div');
+            cell.element.setAttribute("class", "field" );
+            // Add it to the board
+            boardElement.appendChild(cell.element);
+        }
+    }
+    let field = document.getElementsByClassName("field");
+    let fields = [...field];
+    //fields = shuffle(fields);
+    // remove old classes from each card
+    for (let i = 0; i < fields.length; i++){
+        fields[i].classList.remove("open");
+        fields[i].classList.remove("flagged");
+    }
+    // add event listeners to each field
+    for (let i = 0; i < fields.length; i++){
+        fields[i].addEventListener("click", openField);
+        fields[i].addEventListener("contextmenu", markField);
+        fields[i].setAttribute("id", i)
+        //fields[i].style.backgroundColor = '#e6ffe6';
+    }
+    placeMines();
+}
+
+function placeMines(){
+    let randomNumbers = []
+    while(randomNumbers.length < numberOfMines){
+        let r = Math.floor(Math.random()*numberOfFields) + 1;
+        if(randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
+    }
+    for(let i = 0; i < numberOfMines; i++){
+        let randNum = randomNumbers[i];
+        let mineField = document.getElementById(randNum)
+        //let mineField = $('.board').children().eq(fieldIndex);
+        mineField.classList.toggle("mine");
+    }
+}
+
+function initGame() {
+    let level = getLevel();
+    setupFields(level);
+}
+
+let resetValues = function(){
+    flagCount = 0;
+    showFlagCount();
+}
+
+function askForName(){
+    return String(prompt("Unter welchem Namen möchtest du spielen?"));
+}
+
+// @description shuffles cards when page is refreshed / loads
+document.body.onload = initGame();
+
+function startGame(){
+    if(username===''){
+        username = askForName();
+    }
+    let selectedLevel = document.getElementById("levelSelection");
+    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
+    resetValues();
+    setupFields(level);
+    //reset timer
+    second = 0;
+    minute = 0;
+    hour = 0;
+    var timer = document.querySelector(".timer");
+    timer.innerHTML = "0 mins 0 secs";
+    clearInterval(interval);
 }
 
 function flagsOneUp(){
     flagCount++;
     showFlagCount();
-    // Ziel erreicht?
-    if(flagCount == numberOfMines){
-        // TODO check if won
-        alert(username + ", du hast gewonnen!")
-        document.getElementById("newscore").innerHTML = username;
-    }
 }
 
 function flagsOneDown(){
@@ -124,30 +183,3 @@ function flagsOneDown(){
 function showFlagCount(){
     document.getElementById("counter").innerHTML = flagCount;
 }
-
-// https://css-tricks.com/converting-color-spaces-in-javascript/
-function hexToRGB(h) {
-    let r = 0, g = 0, b = 0;
-    // 3 digits
-    if (h.length == 4) {
-        r = "0x" + h[1] + h[1];
-        g = "0x" + h[2] + h[2];
-        b = "0x" + h[3] + h[3];
-        // 6 digits
-    } else if (h.length == 7) {
-        r = "0x" + h[1] + h[2];
-        g = "0x" + h[3] + h[4];
-        b = "0x" + h[5] + h[6];
-    }
-    return "rgb("+ +r + ", " + +g + ", " + +b + ")";
-}
-
-/*
-function startGame(level=2) {
-    askForName();
-    for (var i= 0; i < level; i++){
-        [].forEach.call(fields, function(item){
-            panel.appendChild(item);
-        });
-    }
-}*/
