@@ -42,6 +42,7 @@ h1, h2, h3 {
     float: right;
 }
 
+
 /*
 * Styling for game panel
  */
@@ -139,7 +140,12 @@ h1, h2, h3 {
     margin: 2em 0 2em 0;
 }
 
-#newscore {
+#winnersName {
+    color:black;
+    font-size: 25px;
+}
+
+#finalTime {
     color:black;
     font-size: 25px;
 }

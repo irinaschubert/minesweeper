@@ -1,5 +1,5 @@
 /**
- minesweeper.js
+ Script.js
  Author: Irina Schubert
  Url: https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git
  */
@@ -10,48 +10,42 @@ let openedCards = 0;
 let flagCount = 0;
 let numberOfMines;
 let username = 'Dummy';
-const deck = document.getElementById("board");
-const board = []
 let boardWidth;
 let boardHeight;
 let numberOfFields;
 
 // @description game timer
-let second = 0, minute = 0, hour = 0;
-let timer = document.querySelector(".timer");
+let second = 0;
+let timerCounter = document.getElementById("timerCounter");
 let interval;
 function startTimer() {
     interval = setInterval(function () {
-        timer.innerHTML = minute + "mins " + second + "secs";
+        timerCounter.innerHTML = second;
         second++;
-        if (second == 60) {
-            minute++;
-            second = 0;
-        }
-        if (minute == 60) {
-            hour++;
-            minute = 0;
-        }
     }, 1000);
 }
 
 let openField = function (event){
     let clickedElement = event.target;
     openedCards = openedCards + 1;
+    //start timer on first click
+    if(openedCards === 1){
+        second = 0;
+        startTimer();
+    }
     clickedElement.classList.toggle("open");
 
     // Gewonnen?
-    if(openedCards == (numberOfMines - numberOfMines)){
-        alert(username + ", du hast gewonnen!")
+    if(openedCards === (numberOfMines - numberOfMines)){
+        alert(username + ", du hast gewonnen!");
         document.getElementById("winnersName").innerHTML = username;
         clearInterval(interval);
-        let finalTime = timer.innerHTML;
-        document.getElementById("finalTime").innerHTML = finalTime;
+        document.getElementById("finalTime").innerHTML = timerCounter.innerHTML;
     }
     if(clickedElement.classList.contains("mine")){
-        alert(username + ", du hast verloren!")
+        alert(username + ", du hast verloren!");
     }
-}
+};
 
 let markField = function (event){
     let clickedElement = event.target;
@@ -63,24 +57,35 @@ let markField = function (event){
         clickedElement.classList.toggle("flagged");
         flagsOneUp();
     }
-    else {
-        return;
-    }
-}
+};
 
 function getLevel(){
     let selectedLevel = document.getElementById("levelSelection");
-    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
-    return level;
+    return selectedLevel.options[selectedLevel.selectedIndex].value;
+}
+
+// @description shuffles fields
+// @param {array}
+// @returns shuffled array
+function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
 }
 
 function setupFields(level = 2){
-    if (level == 2){
+    if (level === 2){
         boardWidth = 16;
         boardHeight = 26;
         numberOfFields = boardWidth*boardHeight;
         numberOfMines = 80;
-    }else if (level==1){
+    }else if (level===1){
         boardWidth = 16;
         boardHeight = 16;
         numberOfFields = boardWidth*boardHeight;
@@ -106,37 +111,41 @@ function setupFields(level = 2){
     }
     let field = document.getElementsByClassName("field");
     let fields = [...field];
-    //fields = shuffle(fields);
+    fields = shuffle(fields);
     // remove old classes from each card
     for (let i = 0; i < fields.length; i++){
         fields[i].classList.remove("open");
         fields[i].classList.remove("flagged");
+        fields[i].classList.remove("mine");
     }
     // add event listeners to each field
     for (let i = 0; i < fields.length; i++){
         fields[i].addEventListener("click", openField);
         fields[i].addEventListener("contextmenu", markField);
-        fields[i].setAttribute("id", i)
-        //fields[i].style.backgroundColor = '#e6ffe6';
+        fields[i].setAttribute("id", i);
     }
     placeMines();
 }
 
 function placeMines(){
-    let randomNumbers = []
+    let randomNumbers = [];
     while(randomNumbers.length < numberOfMines){
         let r = Math.floor(Math.random()*numberOfFields) + 1;
         if(randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
     }
+
     for(let i = 0; i < numberOfMines; i++){
         let randNum = randomNumbers[i];
-        let mineField = document.getElementById(randNum)
-        //let mineField = $('.board').children().eq(fieldIndex);
+        let mineField = document.getElementById(randNum);
         mineField.classList.toggle("mine");
     }
 }
 
 function initGame() {
+    if(username===''){
+        username = askForName();
+    }
+    resetValues();
     let level = getLevel();
     setupFields(level);
 }
@@ -144,30 +153,22 @@ function initGame() {
 let resetValues = function(){
     flagCount = 0;
     showFlagCount();
-}
+    //reset timer
+    second = 0;
+    let timerCounter = document.getElementById("timerCounter");
+    timerCounter.innerHTML = second;
+    clearInterval(interval);
+};
 
 function askForName(){
     return String(prompt("Unter welchem Namen möchtest du spielen?"));
 }
 
-// @description shuffles cards when page is refreshed / loads
+// @description initiates the game and fields when page is refreshed / loads
 document.body.onload = initGame();
 
 function startGame(){
-    if(username===''){
-        username = askForName();
-    }
-    let selectedLevel = document.getElementById("levelSelection");
-    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
-    resetValues();
-    setupFields(level);
-    //reset timer
-    second = 0;
-    minute = 0;
-    hour = 0;
-    var timer = document.querySelector(".timer");
-    timer.innerHTML = "0 mins 0 secs";
-    clearInterval(interval);
+    initGame();
 }
 
 function flagsOneUp(){
