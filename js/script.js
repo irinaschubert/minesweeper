@@ -1,26 +1,27 @@
-/**
+/*
+ inspired by: https://github.com/codyseibert/js-minesweeper
  script.js
  Author: Irina Schubert
  Url: https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git
  */
 
 'use strict';
-// global variables
-let openedCards = 0;
-let flagCount = 0;
-let numberOfMines = 0;
+
+const $board = $('#board');
+const $timerCounter = $('#timerCounter');
+const $flagCounter = $('#counter');
+const $levelSelection = $('#levelSelection');
+const $scoreElement = $('#score');
+let rows;
+let cols;
 let username = 'Dummy';
-let boardWidth = 0;
-let boardHeight = 0;
-let numberOfFields = 0;
 
 // @description game timer
 let interval;
 function startTimer() {
     let second = 0;
-    let timerCounter = document.getElementById("timerCounter");
     interval = setInterval(function () {
-        timerCounter.innerHTML = second.toString();
+        $timerCounter.html(second.toString());
         second++;
     }, 1000);
 }
@@ -34,164 +35,167 @@ function stopTimer(){
     clearInterval(interval);
 }
 
-let openField = function (event){
-    let clickedElement = event.target;
-    openedCards = openedCards + 1;
-    //start timer on first click
-    if(openedCards === 1){
-        resetTimer();
+function createBoard(level = 2) {
+    if (level === 2){
+        rows = 16;
+        cols = 16;
+    }else if (level===1){
+        rows = 10;
+        cols = 10;
+    }else {
+        rows = 26;
+        cols = 26;
     }
-    clickedElement.classList.toggle("open");
-
-    // Gewonnen?
-    if(openedCards === (numberOfMines - numberOfMines)){
-        alert(username + ", du hast gewonnen!");
-
-        const scoreElement = document.getElementById('score');
-        let winner = {};
-        winner.element = document.createElement('div');
-        winner.element.setAttribute("class", "winner" );
-        winner.element.innerHTML = username;
-        winner.element.innerHTML = timerCounter.innerHTML;
-        scoreElement.appendChild(winner.element);
-        stopTimer();
+    $board.empty();
+    for (let i = 0; i < rows; i++) {
+        const $row = $('<div>').addClass('row');
+        for (let j = 0; j < cols; j++) {
+            const $field = $('<div>')
+                .addClass('field hidden')
+                .attr('data-row', i)
+                .attr('data-col', j);
+            if (Math.random() < 0.1) {
+                $field.addClass('mine');
+            }
+            $row.append($field);
         }
-
-    if(clickedElement.classList.contains("mine")){
-        alert(username + ", du hast verloren!");
-        const scoreElement = document.getElementById('score');
-        let winner = {};
-        winner.element = document.createElement('div');
-        winner.element.setAttribute("class", "winner" );
-        let winnerPerson = String("Name: " + username + ", Zeit: " + timerCounter.innerHTML);
-        winner.element.innerHTML = winnerPerson;
-        scoreElement.appendChild(winner.element);
-        stopTimer();
+        $board.append($row);
     }
-};
-
-let markField = function (event){
-    let clickedElement = event.target;
-    if (clickedElement.classList.contains("flagged")) {
-        clickedElement.classList.remove("flagged");
-        flagsOneDown();
-    }
-    else if (!clickedElement.classList.contains("flagged")){
-        clickedElement.classList.toggle("flagged");
-        flagsOneUp();
-    }
-};
+}
 
 function getLevel(){
-    let selectedLevel = document.getElementById("levelSelection");
-    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
-    return parseInt(level);
-}
-
-// @description shuffles fields
-// @param {array}
-// @returns shuffled array
-function shuffle(array) {
-    let currentIndex = array.length, temporaryValue, randomIndex;
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-    return array;
-}
-
-function setupFields(level = 2){
-    console.log(level);
-    if (level === 2){
-        boardWidth = 16;
-        boardHeight = 26;
-        numberOfFields = boardWidth*boardHeight;
-        numberOfMines = 80;
-    }else if (level===1){
-        boardWidth = 10;
-        boardHeight = 10;
-        numberOfFields = boardWidth*boardHeight;
-        numberOfMines = 10;
-    }else {
-        boardWidth = 46;
-        boardHeight = 46;
-        numberOfFields = boardWidth*boardHeight;
-        numberOfMines = 150;
-    }
-    const boardElement = document.getElementById('board');
-    // empty existing fields
-    boardElement.innerHTML = "";
-    for (let y = 0; y < boardHeight; y++) {
-        for (let x = 0; x < boardWidth; x++) {
-            let cell = {};
-            // Create a <div class="field"></div> and store it in the cell object
-            cell.element = document.createElement('div');
-            cell.element.setAttribute("class", "field" );
-            // Add it to the board
-            boardElement.appendChild(cell.element);
-        }
-    }
-    let field = document.getElementsByClassName("field");
-    let fields = [...field];
-    fields = shuffle(fields);
-    // remove old classes from each card
-    for (let i = 0; i < fields.length; i++){
-        fields[i].classList.remove("open");
-        fields[i].classList.remove("flagged");
-        fields[i].classList.remove("mine");
-    }
-    // add event listeners to each field
-    for (let i = 0; i < fields.length; i++){
-        fields[i].addEventListener("click", openField);
-        fields[i].addEventListener("contextmenu", markField);
-        fields[i].setAttribute("id", i);
-    }
-    placeMines();
-}
-
-function placeMines(){
-    let randomNumbers = [];
-    while(randomNumbers.length < numberOfMines){
-        let r = Math.floor(Math.random()*numberOfFields) + 1;
-        if(randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
-    }
-    for(let i = 0; i < numberOfMines; i++){
-        let randNum = randomNumbers[i];
-        let mineField = document.getElementById(randNum);
-        mineField.classList.toggle("mine");
-    }
+    return parseInt($levelSelection.val());
 }
 
 let resetValues = function(){
-    setFlagCount(0);
+    updateFlagCount();
     resetTimer();
 };
 
-function initGame() {
+function start() {
     if(username===''){
         username = askForName();
     }
     resetValues();
-    let level = getLevel();
-    setupFields(level);
+    createBoard(getLevel());
 }
 
 function askForName(){
     return String(prompt("Mit welchem Namen möchtest du spielen?"));
 }
 
-function flagsOneUp(){
-    setFlagCount(flagCount+1);
+function updateFlagCount(){
+    $flagCounter.html($('.field.flagged').length);
 }
 
-function flagsOneDown(){
-    setFlagCount(flagCount-1);
+function gameOver(isWin) {
+    stopTimer();
+    let message = null;
+    let icon = null;
+    if (isWin) {
+        message = 'Gratuliere, ' +username + ', du hast gewonnen!';
+        icon = 'fa fa-thumbs-up';
+        const scoreElement = document.getElementById('score');
+        let winner = {};
+        winner.element = document.createElement('div');
+        winner.element.setAttribute("class", "winner" );
+        winner.element.innerHTML = username + ' ' + $timerCounter.text();
+        scoreElement.appendChild(winner.element);
+    } else {
+        message = 'Du hast verloren!';
+        icon = 'fa fa-bolt';
+    }
+    $('.field.mine').append(
+        $('<i>').addClass(icon)
+    );
+    $('.field:not(.mine)')
+        .html(function() {
+            const $cell = $(this);
+            const count = getMineCount(
+                $cell.data('row'),
+                $cell.data('col'),
+            );
+            return count === 0 ? '' : count;
+        });
+    $('.field.hidden').removeClass('hidden');
+    setTimeout(function() {
+        alert(message);
+        start();
+    }, 1000);
 }
 
-function setFlagCount(flag){
-    flagCount = flag;
-    document.getElementById("counter").innerHTML = flagCount;
+function reveal(oi, oj) {
+
+    const seen = {};
+
+    function helper(i, j) {
+        if (i >= rows || j >= cols || i < 0 || j < 0) return;
+        const key = `${i} ${j}`;
+        if (seen[key]) return;
+        const $cell = $(`.field.hidden[data-row=${i}][data-col=${j}]`);
+        const mineCount = getMineCount(i, j);
+        if (!$cell.hasClass('hidden') || $cell.hasClass('mine')) {
+            return;
+        }
+        $cell.removeClass('hidden');
+        $cell.removeClass('flagged');
+        // show number of mines around
+        if (mineCount) {
+            $cell.text(mineCount);
+            return;
+        }
+        // if no mine is around, reveal all adjacent fields which are not mines
+        for (let di = -1; di <= 1; di++) {
+            for (let dj = -1; dj <= 1; dj++) {
+                helper(i + di, j + dj);
+            }
+        }
+    }
+    helper(oi, oj);
+    updateFlagCount();
 }
+
+// get number of mines in adjacent fields
+function getMineCount(i, j) {
+    let count = 0;
+    for (let di = -1; di <= 1; di++) {
+        for (let dj = -1; dj <= 1; dj++) {
+            const ni = i + di;
+            const nj = j + dj;
+            if (ni >= rows || nj >= cols || nj < 0 || ni < 0) continue;
+            const $cell = $(`.field.hidden[data-row=${ni}][data-col=${nj}]`);
+            if ($cell.hasClass('mine')) count++;
+        }
+    }
+    return count;
+}
+
+$board.on('click', '.field.hidden', function() {
+    const $cell = $(this);
+    const row = $cell.data('row');
+    const col = $cell.data('col');
+
+    if ($cell.hasClass('mine')) {
+        gameOver(false);
+    } else {
+        reveal(row, col);
+        //if only mines are left hidden: win
+        const isGameOver = $('.field.hidden').length === $('.field.mine').length;
+        if (isGameOver) gameOver(true);
+    }
+});
+
+$board.on('contextmenu', '.field.hidden', function(event) {
+    event.preventDefault();
+    let clickedElement = event.target;
+    if (clickedElement.classList.contains("flagged")) {
+        clickedElement.classList.remove("flagged");
+        updateFlagCount();
+    }
+    else if (!clickedElement.classList.contains("flagged")){
+        clickedElement.classList.toggle("flagged");
+        updateFlagCount();
+    }
+});
+
+start();
