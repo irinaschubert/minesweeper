@@ -12,7 +12,11 @@ Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper
 *  Das Spiel zeigt anhand einer aufwärts zählenden Zahl an, wie viele Sekunden bereits vergangen sind.
 
 # Mockup
-![alt text][basic]<br/>
+![mockup][basic]<br/>
+
+# Version 1.0
+![v1][v1]<br/>
 
 
 [basic]: /res/basic.png "basic mockup"
+[v1]: /res/minesweeper_start.PNG "first version"
