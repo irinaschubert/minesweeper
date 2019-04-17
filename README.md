@@ -15,8 +15,8 @@ Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper
 ![mockup][basic]<br/>
 
 # Version 1.0
-![v1][v1]<br/>
+![first version][version1]<br/>
 
 
 [basic]: /res/basic.png "basic mockup"
-[v1]: /res/minesweeper_start.PNG "first version"
+[version1]: /res/minesweeper_start.PNG "first version"
