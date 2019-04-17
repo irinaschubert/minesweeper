@@ -1,8 +1,7 @@
-/* style.css */
-
 body {
     font-family: 'Amatic SC', cursive;
     font-size: 16px;
+    text-align: center;
 }
 
 .container {
@@ -16,13 +15,6 @@ h1, h2, h3 {
     font-family: 'Amatic SC', cursive;
 }
 
-/*
- * Styling for panels
- */
-
-/*
-* Styling for information panel
- */
 .information-panel {
     text-align: left;
     margin-bottom: 10px;
@@ -42,12 +34,8 @@ h1, h2, h3 {
     float: right;
 }
 
-
-/*
-* Styling for game panel
- */
 #board {
-    width: calc(16 * 26px);
+    display: inline-block;
     margin: 0 0 2em;
     background: #e6e6ff;
     padding: 1.2em;
@@ -55,41 +43,49 @@ h1, h2, h3 {
     box-shadow: 8px 9px 26px 0 rgba(46, 61, 73, 0.5);
 }
 
-#board .field {
-    background-color: #e6ffe6;
-    box-sizing: border-box;
-    float: left;
-    height: 1.1rem;
-    width: 1.1rem;
-    border-radius: 2px;
+.row {
+    font-size: 0px;
+}
+
+.field {
+    display: inline-block;
+    height: 2.3rem;
+    width: 2.3rem;
+    background-color: #ffffff;
+    border-right: 1px solid #00cc00;
+    border-bottom: 1px solid #00cc00;
     cursor: pointer;
-    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
-}
-
-#board .field:hover {
-    background-color: #c9ffc9 !important;
-}
-
-#board .field.open {
-    #background-color: #ffffff !important;
-    font-size: 20;
+    vertical-align: top;
     color: #00cc00;
-    pointer-events: none;
-    opacity: 0.2;
+    font-size: 1.5rem;
+    line-height: 2.3rem;
 }
 
-#board .field.flagged {
+/*.col.hidden.mine {
+    background-color: #ff3377;
+}*/
+
+.field.hidden {
+    background-color: #e6ffe6;
+    cursor: pointer;
+}
+
+.field.hidden:hover {
+    background-color: #c9ffc9;
+}
+
+.field.flagged {
     background-color: #ff33cc !important;
 }
 
-#board .field.open.mine {
-    background-color: #ff3377;
-    opacity: 1;
+.row:last-child .field {
+    border-bottom: none;
 }
 
-/**
- * Styling for buttons
- */
+.row .field:last-child {
+    border-right: none;
+}
+
 .play-again {
     background-color: #141214;
     padding: 0.7rem 1rem;

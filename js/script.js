@@ -1,5 +1,5 @@
 /**
- Script.js
+ script.js
  Author: Irina Schubert
  Url: https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git
  */
@@ -8,21 +8,30 @@
 // global variables
 let openedCards = 0;
 let flagCount = 0;
-let numberOfMines;
+let numberOfMines = 0;
 let username = 'Dummy';
-let boardWidth;
-let boardHeight;
-let numberOfFields;
+let boardWidth = 0;
+let boardHeight = 0;
+let numberOfFields = 0;
 
 // @description game timer
-let second = 0;
-let timerCounter = document.getElementById("timerCounter");
 let interval;
 function startTimer() {
+    let second = 0;
+    let timerCounter = document.getElementById("timerCounter");
     interval = setInterval(function () {
-        timerCounter.innerHTML = second;
+        timerCounter.innerHTML = second.toString();
         second++;
     }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(interval);
+    startTimer();
+}
+
+function stopTimer(){
+    clearInterval(interval);
 }
 
 let openField = function (event){
@@ -30,8 +39,7 @@ let openField = function (event){
     openedCards = openedCards + 1;
     //start timer on first click
     if(openedCards === 1){
-        second = 0;
-        startTimer();
+        resetTimer();
     }
     clickedElement.classList.toggle("open");
 
@@ -46,7 +54,7 @@ let openField = function (event){
         winner.element.innerHTML = username;
         winner.element.innerHTML = timerCounter.innerHTML;
         scoreElement.appendChild(winner.element);
-
+        stopTimer();
         }
 
     if(clickedElement.classList.contains("mine")){
@@ -58,6 +66,7 @@ let openField = function (event){
         let winnerPerson = String("Name: " + username + ", Zeit: " + timerCounter.innerHTML);
         winner.element.innerHTML = winnerPerson;
         scoreElement.appendChild(winner.element);
+        stopTimer();
     }
 };
 
@@ -75,7 +84,8 @@ let markField = function (event){
 
 function getLevel(){
     let selectedLevel = document.getElementById("levelSelection");
-    return selectedLevel.options[selectedLevel.selectedIndex].value;
+    let level = selectedLevel.options[selectedLevel.selectedIndex].value;
+    return parseInt(level);
 }
 
 // @description shuffles fields
@@ -94,19 +104,20 @@ function shuffle(array) {
 }
 
 function setupFields(level = 2){
+    console.log(level);
     if (level === 2){
         boardWidth = 16;
         boardHeight = 26;
         numberOfFields = boardWidth*boardHeight;
         numberOfMines = 80;
     }else if (level===1){
-        boardWidth = 16;
-        boardHeight = 16;
+        boardWidth = 10;
+        boardHeight = 10;
         numberOfFields = boardWidth*boardHeight;
         numberOfMines = 10;
     }else {
-        boardWidth = 26;
-        boardHeight = 26;
+        boardWidth = 46;
+        boardHeight = 46;
         numberOfFields = boardWidth*boardHeight;
         numberOfMines = 150;
     }
@@ -147,13 +158,17 @@ function placeMines(){
         let r = Math.floor(Math.random()*numberOfFields) + 1;
         if(randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
     }
-
     for(let i = 0; i < numberOfMines; i++){
         let randNum = randomNumbers[i];
         let mineField = document.getElementById(randNum);
         mineField.classList.toggle("mine");
     }
 }
+
+let resetValues = function(){
+    setFlagCount(0);
+    resetTimer();
+};
 
 function initGame() {
     if(username===''){
@@ -164,37 +179,19 @@ function initGame() {
     setupFields(level);
 }
 
-let resetValues = function(){
-    flagCount = 0;
-    showFlagCount();
-    //reset timer
-    second = 0;
-    let timerCounter = document.getElementById("timerCounter");
-    timerCounter.innerHTML = second;
-    clearInterval(interval);
-};
-
 function askForName(){
-    return String(prompt("Unter welchem Namen möchtest du spielen?"));
-}
-
-// @description initiates the game and fields when page is refreshed / loads
-document.body.onload = initGame();
-
-function startGame(){
-    initGame();
+    return String(prompt("Mit welchem Namen möchtest du spielen?"));
 }
 
 function flagsOneUp(){
-    flagCount++;
-    showFlagCount();
+    setFlagCount(flagCount+1);
 }
 
 function flagsOneDown(){
-    flagCount--;
-    showFlagCount();
+    setFlagCount(flagCount-1);
 }
 
-function showFlagCount(){
+function setFlagCount(flag){
+    flagCount = flag;
     document.getElementById("counter").innerHTML = flagCount;
 }
