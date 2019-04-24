@@ -2,7 +2,12 @@
 
 export default class Board{
     constructor(level = 2){
-        //const $board = $('#board');
+        const $board = $('#board');
+        this.createBoard($board, level);
+    }
+
+    createBoard(board, level = 2) {
+        board.empty();
 
         if (level === 2){
             this.rows = 16;
@@ -15,11 +20,6 @@ export default class Board{
             this.cols = 26;
         }
 
-        //this.createBoard($board, level);
-    }
-
-    createBoard(board, level = 2) {
-        board.empty();
         for (let i = 0; i < this.rows; i++) {
             const $row = $('<div>').addClass('row');
             for (let j = 0; j < this.cols; j++) {

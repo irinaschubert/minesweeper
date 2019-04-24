@@ -1,6 +1,6 @@
 /*
  inspired by: https://github.com/codyseibert/js-minesweeper
- script.js
+ script.mjs
  Author: Irina Schubert
  Url: https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git
  */
@@ -9,6 +9,7 @@
 
 import Timer from "./timer.mjs";
 import Board from "./board.mjs";
+import FlagCounter from "./flagCounter.mjs";
 
 const $timerCounter = $('#timerCounter');
 const $board = $('#board');
@@ -20,17 +21,20 @@ let username = 'Dummy';
 
 let timer = new Timer();
 let board = new Board();
+let flagCounter = new FlagCounter($flagCounter);
 
 function getLevel(){
     return parseInt($levelSelection.val());
 }
 
 let resetValues = function(){
-    updateFlagCount();
+    flagCounter.resetFlagCount();
     timer.resetTimer();
 };
 
 function start() {
+    $levelSelection.on("change", start);
+    $('.restart').on("click", start);
     if(username===''){
         username = askForName();
     }
@@ -42,9 +46,7 @@ function askForName(){
     return String(prompt("Mit welchem Namen möchtest du spielen?"));
 }
 
-function updateFlagCount(){
-    $flagCounter.html($('.field.flagged').length);
-}
+
 
 function gameOver(isWin) {
     timer.stopTimer();
@@ -83,9 +85,7 @@ function gameOver(isWin) {
 }
 
 function reveal(oi, oj) {
-
     const seen = {};
-
     function helper(i, j) {
         if (i >= board.getRows() || j >= board.getCols() || i < 0 || j < 0) return;
         const key = `${i} ${j}`;
@@ -110,7 +110,7 @@ function reveal(oi, oj) {
         }
     }
     helper(oi, oj);
-    updateFlagCount();
+    flagCounter.updateFlagCount();
 }
 
 // get number of mines in adjacent fields
@@ -148,12 +148,12 @@ $board.on('contextmenu', '.field.hidden', function(event) {
     let clickedElement = event.target;
     if (clickedElement.classList.contains("flagged")) {
         clickedElement.classList.remove("flagged");
-        updateFlagCount();
+        flagCounter.updateFlagCount();
     }
     else if (!clickedElement.classList.contains("flagged")){
         clickedElement.classList.toggle("flagged");
-        updateFlagCount();
+        flagCounter.updateFlagCount();
     }
 });
 
-start();
+window.addEventListener("load", start, false);
