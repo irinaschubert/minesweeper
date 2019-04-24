@@ -8,44 +8,18 @@
 'use strict';
 
 import Timer from "./timer.mjs";
+import Board from "./board.mjs";
+
 const $timerCounter = $('#timerCounter');
 const $board = $('#board');
 const $flagCounter = $('#counter');
 const $levelSelection = $('#levelSelection');
 const $scoreElement = $('#score');
-let rows;
-let cols;
+
 let username = 'Dummy';
 
 let timer = new Timer();
-
-function createBoard(level = 2) {
-    if (level === 2){
-        rows = 16;
-        cols = 16;
-    }else if (level===1){
-        rows = 10;
-        cols = 10;
-    }else {
-        rows = 26;
-        cols = 26;
-    }
-    $board.empty();
-    for (let i = 0; i < rows; i++) {
-        const $row = $('<div>').addClass('row');
-        for (let j = 0; j < cols; j++) {
-            const $field = $('<div>')
-                .addClass('field hidden')
-                .attr('data-row', i)
-                .attr('data-col', j);
-            if (Math.random() < 0.1) {
-                $field.addClass('mine');
-            }
-            $row.append($field);
-        }
-        $board.append($row);
-    }
-}
+let board = new Board();
 
 function getLevel(){
     return parseInt($levelSelection.val());
@@ -61,7 +35,7 @@ function start() {
         username = askForName();
     }
     resetValues();
-    createBoard(getLevel());
+    board.createBoard($board, getLevel());
 }
 
 function askForName(){
@@ -113,7 +87,7 @@ function reveal(oi, oj) {
     const seen = {};
 
     function helper(i, j) {
-        if (i >= rows || j >= cols || i < 0 || j < 0) return;
+        if (i >= board.getRows() || j >= board.getCols() || i < 0 || j < 0) return;
         const key = `${i} ${j}`;
         if (seen[key]) return;
         const $cell = $(`.field.hidden[data-row=${i}][data-col=${j}]`);
@@ -146,7 +120,7 @@ function getMineCount(i, j) {
         for (let dj = -1; dj <= 1; dj++) {
             const ni = i + di;
             const nj = j + dj;
-            if (ni >= rows || nj >= cols || nj < 0 || ni < 0) continue;
+            if (ni >= board.getRows() || nj >= board.getCols() || nj < 0 || ni < 0) continue;
             const $cell = $(`.field.hidden[data-row=${ni}][data-col=${nj}]`);
             if ($cell.hasClass('mine')) count++;
         }

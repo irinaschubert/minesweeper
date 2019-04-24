@@ -21,5 +21,4 @@ export default class Timer{
         this.stopTimer();
         this.startTimer();
     }
-
 }
