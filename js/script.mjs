@@ -46,8 +46,6 @@ function askForName(){
     return String(prompt("Mit welchem Namen möchtest du spielen?"));
 }
 
-
-
 function gameOver(isWin) {
     timer.stopTimer();
     let message = null;
