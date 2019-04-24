@@ -7,8 +7,9 @@
 
 'use strict';
 
-const $board = $('#board');
+import Timer from "./timer.mjs";
 const $timerCounter = $('#timerCounter');
+const $board = $('#board');
 const $flagCounter = $('#counter');
 const $levelSelection = $('#levelSelection');
 const $scoreElement = $('#score');
@@ -16,24 +17,7 @@ let rows;
 let cols;
 let username = 'Dummy';
 
-// @description game timer
-let interval;
-function startTimer() {
-    let second = 0;
-    interval = setInterval(function () {
-        $timerCounter.html(second.toString());
-        second++;
-    }, 1000);
-}
-
-function resetTimer() {
-    clearInterval(interval);
-    startTimer();
-}
-
-function stopTimer(){
-    clearInterval(interval);
-}
+let timer = new Timer();
 
 function createBoard(level = 2) {
     if (level === 2){
@@ -69,7 +53,7 @@ function getLevel(){
 
 let resetValues = function(){
     updateFlagCount();
-    resetTimer();
+    timer.resetTimer();
 };
 
 function start() {
@@ -89,7 +73,7 @@ function updateFlagCount(){
 }
 
 function gameOver(isWin) {
-    stopTimer();
+    timer.stopTimer();
     let message = null;
     let icon = null;
     if (isWin) {
