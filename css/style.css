@@ -45,6 +45,7 @@ h1, h2, h3 {
 
 .row {
     font-size: 0px;
+
 }
 
 .field {
@@ -61,7 +62,8 @@ h1, h2, h3 {
     line-height: 2.3rem;
 }
 
-/*.col.hidden.mine {
+/* use for debugging
+    .col.hidden.mine {
     background-color: #ff3377;
 }*/
 

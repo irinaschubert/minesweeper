@@ -1,0 +1,13 @@
+{
+  "name": "u2",
+  "version": "1.0.0",
+  "description": "Algorithms with unit tests",
+  "main": "index.js",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "../node_modules/.bin/jest *.js"
+  },
+  "author": "Michael Rueegg"
+}
