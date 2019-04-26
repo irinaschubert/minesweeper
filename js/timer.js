@@ -1,4 +1,5 @@
-const $timerCounter = $('#timerCounter');
+//const $timerCounter = $('#timerCounter');
+const $timerCounter = document.getElementById("timerCounter");
 
 class Timer{
     constructor(){

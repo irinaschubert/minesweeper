@@ -1,3 +1,4 @@
+
 class FlagCounter{
     constructor(flagCounterElement){
         this.flagCounterElement = flagCounterElement;

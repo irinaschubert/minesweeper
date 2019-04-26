@@ -6,16 +6,24 @@
  */
 
 'use strict';
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+global.document = new JSDOM("http://localhost:63342/minesweeper/fwebt_minesweeper/html/index.html").window.document;
 
 let Timer = require("./timer.js");
 let Board = require("./board.js");
 let FlagCounter = require("./flagCounter.js");
 
-const $timerCounter = $('#timerCounter');
-const $board = $('#board');
-const $flagCounter = $('#counter');
-const $levelSelection = $('#levelSelection');
-const $scoreElement = $('#score');
+//const $timerCounter = $('#timerCounter');
+//const $board = $('#board');
+//const $flagCounter = $('#counter');
+//const $levelSelection = $('#levelSelection');
+//const $scoreElement = $('#score');
+const $timerCounter = document.getElementById("timerCounter");
+const $board = document.getElementById("board");
+const $flagCounter = document.getElementById("counter");
+const $levelSelection = document.getElementById("levelSelection");
+const $scoreElement = document.getElementById("score");
 
 let username = 'Dummy';
 
