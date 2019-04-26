@@ -1,6 +1,6 @@
 const $timerCounter = $('#timerCounter');
 
-export default class Timer{
+class Timer{
     constructor(){
         let interval;
     }
@@ -22,3 +22,5 @@ export default class Timer{
         this.startTimer();
     }
 }
+
+module.exports = Timer;

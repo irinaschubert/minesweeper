@@ -7,9 +7,9 @@
 
 'use strict';
 
-import Timer from "./timer.js";
-import Board from "./board.js";
-import FlagCounter from "./flagCounter.js";
+let Timer = require("./timer.js");
+let Board = require("./board.js");
+let FlagCounter = require("./flagCounter.js");
 
 const $timerCounter = $('#timerCounter');
 const $board = $('#board');

@@ -1,4 +1,4 @@
-export default class FlagCounter{
+class FlagCounter{
     constructor(flagCounterElement){
         this.flagCounterElement = flagCounterElement;
     }
@@ -11,3 +11,5 @@ export default class FlagCounter{
         this.flagCounterElement.html($('.field.flagged').length);
     }
 }
+
+module.exports = FlagCounter;

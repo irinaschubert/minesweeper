@@ -1,6 +1,4 @@
-
-
-export default class Board{
+class Board{
     constructor(level = 2){
         const $board = $('#board');
         this.createBoard($board, level);
@@ -45,3 +43,4 @@ export default class Board{
     }
 }
 
+module.exports = Board;
