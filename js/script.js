@@ -7,9 +7,9 @@
 
 'use strict';
 
-import Timer from "./timer.mjs";
-import Board from "./board.mjs";
-import FlagCounter from "./flagCounter.mjs";
+import Timer from "./timer.js";
+import Board from "./board.js";
+import FlagCounter from "./flagCounter.js";
 
 const $timerCounter = $('#timerCounter');
 const $board = $('#board');
