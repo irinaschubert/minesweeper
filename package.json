@@ -1,0 +1,26 @@
+{
+  "name": "fwebt_minesweeper",
+  "version": "1.0.0",
+  "description": "Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper-Spiels dar.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "jest": "^24.7.1",
+    "jquery": "^3.4.0",
+    "jsdom": "^15.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest *.js",
+    "build": "browserify index.js > bundle.js && live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git"
+  },
+  "author": "Irina Schubert",
+  "license": "ISC"
+}
