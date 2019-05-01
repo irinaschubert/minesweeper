@@ -1,8 +1,7 @@
-
+const $board = $('#board');
 
 export default class Board{
     constructor(level = 2){
-        const $board = $('#board');
         this.createBoard($board, level);
     }
 

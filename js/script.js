@@ -1,6 +1,5 @@
 /*
- inspired by: https://github.com/codyseibert/js-minesweeper
- script.mjs
+ game logic inspired by: https://github.com/codyseibert/js-minesweeper
  Author: Irina Schubert
  Url: https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git
  */

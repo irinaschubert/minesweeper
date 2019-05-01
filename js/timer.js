@@ -1,12 +1,12 @@
-const $timerCounter = $('#timerCounter');
+let $timerCounter = $('#timerCounter');
 
 export default class Timer{
     constructor(){
-        let interval;
+        this.second = 0;
     }
 
     startTimer() {
-        let second = 0;
+        let second = this.second;
         this.interval = setInterval(function () {
             $timerCounter.html(second.toString());
             second++;
@@ -15,6 +15,7 @@ export default class Timer{
 
     stopTimer(){
         clearInterval(this.interval);
+        this.second = 0;
     }
 
     resetTimer() {
