@@ -58,6 +58,27 @@ function gameOver(isWin) {
         winner.element.setAttribute("class", "winner" );
         winner.element.innerHTML = username + ' ' + $timerCounter.text();
         scoreElement.appendChild(winner.element);
+        fetch('https://xkcd.now.sh/'+$timerCounter.text())
+            .then(response => response.json())
+            .then(json => {
+                const img = json.img;
+                console.log(img);
+                const scoreElement = document.getElementById('score');
+                let winner = {};
+                winner.element = document.createElement('div');
+                winner.element.setAttribute("class", "price" );
+                scoreElement.appendChild(winner.element);
+                let image = {};
+                image.element = document.createElement('img');
+                image.element.setAttribute("class", "comic" );
+                image.element.setAttribute("src", img)
+                scoreElement.appendChild(winner.element);
+                winner.element.appendChild(image.element);
+
+            })
+            .catch(error => {
+                console.error(" error: " + error);
+            });
     } else {
         message = 'Du hast verloren!';
         icon = 'fa fa-bolt';
@@ -125,6 +146,11 @@ function getMineCount(i, j) {
     return count;
 }
 
+
+
+
+
+
 $board.on('click', '.field.hidden', function() {
     const $cell = $(this);
     const row = $cell.data('row');
@@ -154,3 +180,6 @@ $board.on('contextmenu', '.field.hidden', function(event) {
 });
 
 window.addEventListener("load", start, false);
+
+
+
