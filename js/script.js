@@ -62,7 +62,6 @@ function gameOver(isWin) {
             .then(response => response.json())
             .then(json => {
                 const img = json.img;
-                console.log(img);
                 const scoreElement = document.getElementById('score');
                 let winner = {};
                 winner.element = document.createElement('div');
