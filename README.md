@@ -20,7 +20,7 @@ Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper
 ![first version][version1]<br/>
 
 # Reward xkcd
-![comic][version1]<br/>
+![comic][comic]<br/>
 
 
 [basic]: /res/basic.png "basic mockup"
