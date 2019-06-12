@@ -1,5 +1,5 @@
 /*
- game logic inspired by: https://github.com/codyseibert/js-minesweeper
+ game logic heavily inspired by (read stolen from): https://github.com/codyseibert/js-minesweeper
  Author: Irina Schubert
  Url: https://git.ffhs.ch/irina.schubert/fwebt_minesweeper.git
  */
