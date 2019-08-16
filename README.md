@@ -1,7 +1,7 @@
 # Minesweeper
 Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper-Spiels dar.
 
-# Anforderungen
+# Requirements
 *  Das Spiel funktioniert nach den bekannten Spielregeln (dokumentiert z.B. hier: https://www.bernhard-gaul.de/spiele/minesweeper/minesweeper-spielregel.html).
 *  Der Spieler kann das Spiel jederzeit neu starten.
 *  Der Spieler kann Felder aufdecken (Linksklick) oder als Mine markieren (Rechtsklick).
@@ -10,13 +10,10 @@ Die Webapplikation stellt eine browserbasierte Version des bekannten Minesweeper
 *  Das Spiel zählt während des Spiels die Anzahl Markierungen, die der Spieler vorgenommen hat, um Minen zu kennzeichnen und zeigt diese Zahl stets an.
 *  Das Spiel zeigt anhand einer aufwärts zählenden Zahl an, wie viele Sekunden seit dem Start bereits vergangen sind.
 
-# Mockup
-![mockup][basic]<br/>
-
-# Version 1.0
+# During the game
 ![first version][version1]<br/>
 
-# Reward xkcd
+# After the game
 ![xkcd][comic]<br/>
 
 
